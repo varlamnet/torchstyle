@@ -18,7 +18,7 @@ import webbrowser
 ### SIDEBARS ###
 ################
 if st.sidebar.button('💻 Code'):
-    webbrowser.open_new_tab('https://github.com/varlamnet/torchstyle')
+    webbrowser.open('https://github.com/varlamnet/torchstyle')
 
 option1 = st.sidebar.selectbox('Content image', ('Capitol', 'My image'))
 
