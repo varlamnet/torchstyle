@@ -36,7 +36,7 @@ option2 = st.sidebar.selectbox('Style image', ('Scream', 'My image'))
 if option2 == 'Scream':
     option2 = Image.open(f"images/{option2}.jpg")
 else:
-    option2 = st.sidebar.file_uploader("Upload Upload 800x800 image ")
+    option2 = st.sidebar.file_uploader("Upload 800x800 image ")
     if option2 is not None:
         option2 = Image.open(option2)
     else:
