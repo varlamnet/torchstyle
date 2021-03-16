@@ -41,8 +41,8 @@ else:
     else:
         option2 = Image.open("images/Scream.jpg")
 
-optm = st.sidebar.radio("Optimizer", ('RMSprop', 'LBFGS', 'Adam'))
-Steps = st.sidebar.slider('Steps', 20, 600, 120, 20)
+optm = st.sidebar.radio("Optimizer", ('LBFGS', 'RMSprop', 'Adam'))
+Steps = st.sidebar.slider('Steps', 20, 600, 100, 20)
 imsize = st.sidebar.slider('Output image quality', 50, 800, 250, 50)
 
 ############
@@ -176,10 +176,10 @@ input_img = content_img.clone()
 def get_input_optimizer(input_img):
     if optm == "LBFGS":
         optimizer = optim.LBFGS([input_img.requires_grad_()])
-    elif optm == "Adam":
-        optimizer = optim.Adam([input_img.requires_grad_()])
     elif optm == "RMSprop":
         optimizer = optim.RMSprop([input_img.requires_grad_()])
+    elif optm == "Adam":
+        optimizer = optim.Adam([input_img.requires_grad_()])
     return optimizer
 
 def run_style_transfer(cnn, normalization_mean, normalization_std,
