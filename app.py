@@ -13,11 +13,12 @@ import torchvision.transforms as transforms
 import torchvision.models as models
 import copy
 import time 
-
+import webbrowser
 ################
 ### SIDEBARS ###
 ################
-st.sidebar.markdown('[Code is here](https://github.com/varlamnet/torchstyle)')
+if st.sidebar.button('💻 Code'):
+    webbrowser.open_new_tab('https://github.com/varlamnet/torchstyle')
 
 option1 = st.sidebar.selectbox('Content image', ('Capitol', 'My image'))
 
@@ -41,14 +42,14 @@ else:
     else:
         option2 = Image.open("images/Scream.jpg")
 
-optm = st.sidebar.radio("Optimizer", ('LBFGS', 'RMSprop', 'Adam'))
+optm = st.sidebar.radio("Optimizer", ('RMSprop', 'LBFGS', 'Adam'))
 Steps = st.sidebar.slider('Steps', 20, 600, 100, 20)
 imsize = st.sidebar.slider('Output image quality', 50, 800, 250, 50)
 
 ############
 ### MAIN ###
 ############
-st.markdown("# Neural Transfer")
+st.markdown("# ✦ Neural Transfer ✦")
 st.markdown('## PyTorch Edition')
 
 st.write('Select images or upload your own (must be 800x800)')
@@ -174,10 +175,10 @@ def get_style_model_and_losses(cnn, normalization_mean, normalization_std,
 input_img = content_img.clone()
 
 def get_input_optimizer(input_img):
-    if optm == "LBFGS":
-        optimizer = optim.LBFGS([input_img.requires_grad_()])
-    elif optm == "RMSprop":
+    if optm == "RMSprop":
         optimizer = optim.RMSprop([input_img.requires_grad_()])
+    elif optm == "LBFGS":
+        optimizer = optim.LBFGS([input_img.requires_grad_()])
     elif optm == "Adam":
         optimizer = optim.Adam([input_img.requires_grad_()])
     return optimizer
@@ -226,7 +227,7 @@ def run_style_transfer(cnn, normalization_mean, normalization_std,
     return input_img
 
 st.markdown('### See the result')
-if st.button('Train!'):
+if st.button('Train 🎈'):
     st.write('*This will take a few minutes max.*')
     output = run_style_transfer(cnn, cnn_normalization_mean, cnn_normalization_std,
                                 content_img, style_img, input_img)
