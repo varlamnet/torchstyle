@@ -42,7 +42,7 @@ else:
     else:
         option2 = Image.open("images/Scream.jpg")
 
-optm = st.sidebar.radio("Optimizer", ('RMSprop', 'LBFGS', 'Adam'))
+optm = st.sidebar.radio("Optimizer", ('LBFGS','RMSprop','Adam'))
 Steps = st.sidebar.slider('Steps', 20, 600, 100, 20)
 imsize = st.sidebar.slider('Output image quality', 50, 800, 250, 50)
 
@@ -105,8 +105,8 @@ class StyleLoss(nn.Module):
         self.loss = F.mse_loss(G, self.target)
         return input
 
-cnn = models.alexnet(pretrained=True).features.to(device).eval()
-# cnn = models.vgg19(pretrained=True).features.to(device).eval()
+# cnn = models.alexnet(pretrained=True).features.to(device).eval()
+cnn = models.vgg19(pretrained=True).features.to(device).eval()
 
 cnn_normalization_mean = torch.tensor([0.485, 0.456, 0.406]).to(device)
 cnn_normalization_std = torch.tensor([0.229, 0.224, 0.225]).to(device)
@@ -175,10 +175,10 @@ def get_style_model_and_losses(cnn, normalization_mean, normalization_std,
 input_img = content_img.clone()
 
 def get_input_optimizer(input_img):
-    if optm == "RMSprop":
-        optimizer = optim.RMSprop([input_img.requires_grad_()])
-    elif optm == "LBFGS":
+    if optm == "LBFGS":
         optimizer = optim.LBFGS([input_img.requires_grad_()])
+    elif optm == "RMSprop":
+        optimizer = optim.RMSprop([input_img.requires_grad_()])
     elif optm == "Adam":
         optimizer = optim.Adam([input_img.requires_grad_()])
     return optimizer
@@ -191,7 +191,7 @@ def run_style_transfer(cnn, normalization_mean, normalization_std,
         normalization_mean, normalization_std, style_img, content_img)
     optimizer = get_input_optimizer(input_img)
 
-    st.write('Optimizing AlexNet..')
+    st.write('Optimizing VGG19..')
     run = [0]
     my_bar = st.progress(0)
     while run[0] < num_steps:
