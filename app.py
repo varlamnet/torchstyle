@@ -4,13 +4,14 @@ import pandas as pd
 from PIL import Image
 import os
 os.chdir(os.path.dirname(__file__))
-import matplotlib.pyplot as plt
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
 import torchvision.transforms as transforms
 import torchvision.models as models
+from torchvision.models import AlexNet_Weights
+# from torchvision.models import VGG19_Weights
 import copy
 import time 
 import webbrowser
@@ -18,7 +19,7 @@ import webbrowser
 ### SIDEBARS ###
 ################
 if st.sidebar.button('💻 Code'):
-    webbrowser.open_new_tab('https://github.com/varlamnet/torchstyle')
+    webbrowser.open('https://github.com/varlamnet/torchstyle')
 
 option1 = st.sidebar.selectbox('Content image', ('Capitol', 'My image'))
 
@@ -36,7 +37,7 @@ option2 = st.sidebar.selectbox('Style image', ('Scream', 'My image'))
 if option2 == 'Scream':
     option2 = Image.open(f"images/{option2}.jpg")
 else:
-    option2 = st.sidebar.file_uploader("Upload Upload 800x800 image ")
+    option2 = st.sidebar.file_uploader("Upload 800x800 image ")
     if option2 is not None:
         option2 = Image.open(option2)
     else:
@@ -54,7 +55,7 @@ st.markdown('## PyTorch Edition')
 
 st.write('Select images or upload your own (must be 800x800)')
 
-col1, col2 = st.beta_columns(2)
+col1, col2 = st.columns(2)
 with col1:
     st.image(option1, width = 250, caption = "Content image")
 with col2:
@@ -67,9 +68,9 @@ loader = transforms.Compose([
     transforms.Resize(imsize),  # scale imported image
     transforms.ToTensor()])  # transform it into a torch tensor
 
-@st.cache(show_spinner=False)
-def image_loader(image):
-    image = loader(image).unsqueeze(0)
+# @st.cache(show_spinner=False)
+def image_loader(_image):
+    image = loader(_image).unsqueeze(0)
     return image.to(device, torch.float)
 
 content_img = image_loader(option1)
@@ -105,8 +106,8 @@ class StyleLoss(nn.Module):
         self.loss = F.mse_loss(G, self.target)
         return input
 
-# cnn = models.alexnet(pretrained=True).features.to(device).eval()
-cnn = models.vgg19(pretrained=True).features.to(device).eval()
+cnn = models.alexnet(weights=AlexNet_Weights.DEFAULT).features.to(device).eval()
+# cnn = models.vgg19(weights=VGG19_Weights.DEFAULT).features.to(device).eval()
 
 cnn_normalization_mean = torch.tensor([0.485, 0.456, 0.406]).to(device)
 cnn_normalization_std = torch.tensor([0.229, 0.224, 0.225]).to(device)
