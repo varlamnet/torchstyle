@@ -192,7 +192,7 @@ def run_style_transfer(cnn, normalization_mean, normalization_std,
         normalization_mean, normalization_std, style_img, content_img)
     optimizer = get_input_optimizer(input_img)
 
-    st.write('Optimizing VGG19..')
+    st.write('Optimizing Alexnet..')
     run = [0]
     my_bar = st.progress(0)
     while run[0] < num_steps:
